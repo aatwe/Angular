@@ -1,0 +1,41 @@
+1) 
+
+
+1.1) inline template in Component
+
+import { Component } from '@angular/core';
+
+@Component ({
+   selector: 'my-app',
+   template: '
+      <div>
+         <h1>{{title}}</h1>
+         <div>Learn Angular</div>
+      </div>
+   '
+})
+
+export class AppComponent {
+   title: string = 'Hello World';
+}
+
+
+1.2) template in separate html file
+
+link using 
+@Component ({
+   selector: 'my-app',
+   templateUrl: 'app/app.component.html'
+})
+
+Ex
+import { Component } from '@angular/core';
+
+@Component ({
+   selector: 'my-app',
+   templateUrl: 'app/app.component.html'
+})
+
+export class AppComponent {
+   title: string = 'Hello World';
+}

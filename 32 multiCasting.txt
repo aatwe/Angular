@@ -1,0 +1,97 @@
+Problem statement: send messages to multiple clients in a chat room
+
+
+What is multi casting? broadcasting list of subscribers
+
+Solution
+
+1) multicast group address
+   chat room port
+
+
+2) if user join room --> user add client(his id) to group -->user subscribed
+
+3) user sends message --> sent to multicast group (address,port) --> all other client(id) receive message
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+0) What is UDP? used for realtime //few dropped packets are ok
+	alternative TCP: Slow
+1) import dgram module	//module has implementation of UDP socket
+2) define CHAT_ROOMS object	//what contains?multicast address of each chat room
+								port for each chat room
+3) create a map of what clients in which chat room
+4) How to add client to chatroom? addClientToRoom()
+	if chat room does not exist --> create
+	what after adding client to room? add client to multicast group
+5) How to remove client from room? removeClientFromRooom()
+6) How to broadcast message to all clients in a room? broadCastToRoom()
+		//where message sent? multicast group .
+		 how message sent? server.send()
+
+7) How to listen for other client's messages on group?
+	server.on()
+	 What after message received? 
+		decrypt the message:--> parse : chatroom, sender, text
+		broadcast to all   :--> broadcastToRoom()
+
+
+
+	
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++const dgram = require('dgram');
+const server = dgram.createSocket('udp4');
+
+// Set up the multicast addresses and ports for the chat rooms
+const CHAT_ROOMS = {
+  'room1': { address: '224.0.0.114', port: 5555 },
+  'room2': { address: '224.0.0.115', port: 5556 },
+};
+
+// Map of clients by chat room
+const clientsByRoom = {};
+
+// Function to add a client to a chat room
+function addClientToRoom(room, client) {
+  if (!clientsByRoom[room]) {
+    clientsByRoom[room] = [];
+    server.addMembership(CHAT_ROOMS[room].address);
+  }
+  clientsByRoom[room].push(client);
+}
+
+// Function to remove a client from a chat room
+function removeClientFromRoom(room, client) {
+  if (clientsByRoom[room]) {
+    clientsByRoom[room] = clientsByRoom[room].filter((c) => c !== client);
+    if (clientsByRoom[room].length === 0) {
+      delete clientsByRoom[room];
+      server.dropMembership(CHAT_ROOMS[room].address);
+    }
+  }
+}
+
+// Function to broadcast a message to all clients in a chat room
+function broadcastToRoom(room, message, sender) {
+  if (clientsByRoom[room]) {
+    const buf = Buffer.from(`${sender}: ${message}`);
+    clientsByRoom[room].forEach((client) => {
+      server.send(buf, 0, buf.length, CHAT_ROOMS[room].port, CHAT_ROOMS[room].address, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
+  }
+}
+
+// Listen for messages from chat clients
+server.on('message', (message, remote) => {
+  const [room, sender, text] = message.toString().split('|');
+  broadcastToRoom(room, text, sender);
+});
+
+// Start the server
+server.bind(() => {
+  console.log(`Chat server started on ${server.address().address}:${server.address().port}`);
+});

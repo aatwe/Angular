@@ -1,0 +1,39 @@
+1) Angular App = tree of components
+2) part of / similar to directives
+	
+3) must have template
+	 one component per element can only be instantiated
+
+
+import { Component } from '@angular/core';
+
+@Component ({
+   selector: 'my-app',
+   template: ` <div>
+      <h1>{{title}}</h1>
+      <div>Learn Angular6 with examples</div>
+   </div> `,
+})
+
+export class AppComponent {
+   title: string = 'Welcome to Angular world';
+}
+
+
+4) Components vs Directives
+
+Components:
+How to register? @Component annotation
+What use? Create UI widgets
+ break application into components
+1 Component per DOM element
+@View decorator is mandatory
+template is mandatory
+
+
+Directive:
+How to register? @Directive annotation
+What use? add function to existing DOM element
+ Design reusable components
+Many directives per DOM element
+Does not use View

@@ -1,0 +1,21 @@
+1) Define component 'App'
+	1.1) App component implements OnInit() interface
+
+export class App implements OnInit{
+  constructor(){						//constructor of component  //called when 								//component created
+
+     //called first time before the ngOnInit()	//initialize properties and dependencies
+  }
+
+  ngOnInit(){						//lifecycle hook method
+					//additional initialization tasks on component
+		//called after the constructor and called  after the first ngOnChanges()
+  }
+}
+
+
+Conclusion:
+	constructor: called before ngOnIt()
+
+	
+	ngOnIt() : called after constructor , after ngOnChanges

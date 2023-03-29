@@ -1,0 +1,96 @@
+Promises: used to handle error when executing asynchronous code
+
+0) Built in ,no library needed
+
+1) What is a promise in JS? object
+//If asynchronous operation completed successfully --> promise can call resolve --> returns result
+  If asynchronous operation rejected successfully  --> promise can call reject --> returns errormsg	 
+
+1.1) What part of code is asyncchronous code?
+	Promise ()	//consturctor
+
+2) 3 state of promise?
+	2.1) Pending state: operation not completed
+
+	2.2) Fulfilled	: operation completed, value available
+
+	2.3) Rejected	: operation failed, error message available
+
+
+  2.1) What kind of operation?
+		Asynchronous operation: network requests or file reading
+		//anything that involves IO operation --> are asynchronous
+		//i.e other operations can continue while waiting for them to complete
+
+  2.2) What promise looks like?
+	Scenario: a function addNumbers returning a promise
+	what is promise? function(resolve, reject) 
+		What is it used for? used to handle error when executing asynchronous code
+
+	How to create promise? Promise(resolve, reject) constructor
+		return new Promise(function(resolve, reject) {});
+			//resolve,reject -> mandatory
+
+	what are resolve,reject? separate functions called conditionally based on operation
+		How will we call resolve and reject?
+
+	call the function addNumbers (that contains the promise) with (2,3)
+
+	What is .then() used for? attach callback to Promise(in case of success
+	
+	What is .catch() used for? attach callback to Promise (in case of error)
+
+function fetchUser(id) {
+  return new Promise(function(resolve, reject) {
+    fetch(`https://example.com/users/${id}`)
+      .then(response => response.json())
+      .then(user => resolve(user))
+      .catch(error => reject(error));
+  });
+}
+
+
+	2.3) 3 states of promises using code
+
+// Promise in Pending state
+const myPromise = new Promise((resolve, reject) => {		//create Promise object
+  // Perform some asynchronous operation
+  setTimeout(() => {
+    // After some time, resolve the promise with a value
+    resolve("Promise resolved successfully!");			//resolve Promise
+  }, 2000);
+});
+
+console.log(myPromise); // Promise { <pending> }
+
+
+
+
+// Promise in Fulfilled state
+myPromise.then((value) => {						//what is .then() used for? returns value with which promise resolved				
+  console.log(value); // "Promise resolved successfully!"
+});
+
+
+
+
+
+
+// Promise in Rejected state
+const myRejectedPromise = new Promise((resolve, reject) => {
+  // Perform some asynchronous operation that fails
+  setTimeout(() => {
+    // After some time, reject the promise with an error
+    reject("Promise rejected with an error!");
+  }, 2000);
+});
+
+console.log(myRejectedPromise); // Promise { <pending> }
+
+myRejectedPromise.catch((error) => {
+  console.error(error); // "Promise rejected with an error!"
+});
+
+
+ 
+

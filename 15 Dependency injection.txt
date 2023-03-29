@@ -1,0 +1,116 @@
+Class asking for components, services, directives, other objects dependencies from other external sources
+
+
+Class wont create dependency on its own
+
+Angular: has its own dependency injection framework: DI (Dependency injection framework)
+
+1) Register providers
+	what are provider? objects required for
+	what this object does? //create and manage instances of dependencies that we want to 	inject
+
+	1.1) Register providers at different level
+		module-level
+
+		component-level
+
+	How?@NgModule, @Component
+	@NgModule({
+  		providers: [MyService]
+	})		
+		
+	
+Ex
+import { NgModule } from '@angular/core';
+import { MyService } from './my.service';
+
+@NgModule({
+  providers: [MyService]		//Register MyService
+})
+export class MyModule { }
+
+
+
+2) Declare Dependencies	//which you want to inject in components/services
+ 2.1) Inject MyService dependency --> into a component
+ 2.2) call getMessage() of that service
+
+import { Component } from '@angular/core';
+import { MyService } from './my.service';
+
+@Component({
+  selector: 'app-my-component',
+  template: '<h1>{{ message }}</h1>'
+})
+export class MyComponent {
+  message: string;
+
+  constructor(private myService: MyService) {	//MyService dependency injected in 										component MyComponent constructor
+    this.message = this.myService.getMessage();
+  }
+}
+
+
+3) Use the dependency
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Another example:
+1) Create Service GreetingService
+//greeting.service.ts
+ 1.1) what it does?getMessage() //gets greeting message
+
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GreetingService {
+  getMessage(): string {
+    return 'Hello, World!';
+  }
+}
+
+
+
+2) Inject the service 'GreetingService' into a component 'app.component.ts'
+
+
+import { Component } from '@angular/core';
+import { GreetingService } from './greeting.service';		//import
+
+@Component({
+  selector: 'app-root',
+  template: '<h1>{{ message }}</h1>'
+})
+export class AppComponent {
+  message: string;
+
+  constructor(private greetingService: GreetingService) {	//inject
+    this.message = this.greetingService.getMessage();			//service used
+  }
+}
+
+
+3) Register service
+///
+//app.module.ts
+  3.1) What registering will achieve? service can be injected in AppComponent
+
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { GreetingService } from './greeting.service';
+
+@NgModule({
+  imports: [BrowserModule],
+  declarations: [AppComponent],
+  providers: [GreetingService],	//register at module level. How? providers array
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+4) 

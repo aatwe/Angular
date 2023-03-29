@@ -1,0 +1,45 @@
+1) import HttpClient in root module
+
+import { HttpClientModule } from '@angular/common/http';
+@NgModule({
+  imports: [
+    BrowserModule,
+    // import HttpClientModule after BrowserModule.
+    HttpClientModule,
+  ],
+  ......
+  })
+ export class AppModule {}
+
+
+2) Inject HttpCLient in applications
+
+Create a service: userprofile.service.ts
+//userprofile.service.ts)
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+const userProfileUrl: string = 'assets/data/profile.json';
+
+@Injectable()
+export class UserProfileService {
+  constructor(private http: HttpClient) { }
+}
+
+getUserProfile() {
+  return this.http.get(this.userProfileUrl);
+}
+
+
+3) Create component for subscribing to the service
+//userprofile.component.ts
+
+fetchUserProfile() {
+  this.userProfileService.getUserProfile()
+    .subscribe((data: User) => this.user = {
+        id: data['userId'],
+        name: data['firstName'],
+        city:  data['city']
+    });
+}

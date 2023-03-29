@@ -1,0 +1,24 @@
+1) boundaries in your application
+
+1.1) application divided into modules
+	why divide? separate functionality
+
+Ex app.module.ts
+	//import other dependent modules inside this
+	//BrowserModule mandatory : by default for any web app
+	//Define components in module using declarations option
+		 declarations: [ AppComponent ]
+	//bootstrap option
+		 bootstrap:    [ AppComponent ]	//which component to bootstrap
+
+
+import { NgModule }      from '@angular/core';				
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent }  from './app.component';
+
+@NgModule ({
+   imports:      [ BrowserModule ],
+   declarations: [ AppComponent ],
+   bootstrap:    [ AppComponent ]
+})
+export class AppModule { }

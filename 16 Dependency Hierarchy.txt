@@ -1,0 +1,18 @@
+If component or service requests a dependency:
+	1) look in local injector
+	2) look in parent injector
+	3) ....
+	.. root injector
+
+
+AppModule		//root injector
+   |
+   |- AppComponent		//AppComponent has its own local injector
+         |
+         |- ChildComponent		//has its own local injector
+
+
+
+
+2) Understand how angular resolves dependencies
+	//Ensure components and services have right dependencies injected at right time

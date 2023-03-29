@@ -1,0 +1,29 @@
+1) What is interpolation ? alternative to property binding
+	{{name of property}}
+
+<h3>
+  {{title}}							//double curly braces
+  <img src="{{url}}" style="height:30px">
+</h3>
+
+
+2) Template expressions
+
+What it looks like? <h3>{{username}}, welcome to Angular</h3>
+
+What not allowed?
+	assignments (=,+=,-=,...)
+	new
+	chaining expressions with ; or ,
+	increment / decrement operators (++ , --)
+
+
+3) Template Statements
+	What template statements look like? <button (click)="editProfile()">Edit Profile</button>
+
+	What not allowed?
+				new
+				++ or --
+				+= and -=
+				| , &
+				template expression operators

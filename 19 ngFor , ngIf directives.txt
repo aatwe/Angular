@@ -1,0 +1,51 @@
+1) What directives do??  add functionality to HTML elements
+
+
+ngIf - Used to conditionally render elements in the DOM based on a truthy/falsy expression.
+
+ngFor - Used to loop through an array and render elements for each item in the array.
+
+ngSwitch - Used to conditionally render elements based on multiple cases.
+
+ngClass - Used to dynamically add or remove classes to an element based on a condition.
+
+ngStyle - Used to dynamically apply styles to an element based on a condition.
+
+ngModel - Used for two-way data binding between an input element and a component's property.
+
+ngSubmit - Used to handle the submission of a form.
+
+ng-template - Used to define a template that can be used multiple times within the same component.
+
+ng-content - Used to project content from a parent component into a child component.
+
+ng-container - Used to group elements together and apply directives to the group as a whole.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ngFor directive:
+Used in template
+ex
+users = array
+*     = directive applied to element li
+{{user}} value interpolated in element  //binds value from component class --> template
+
+
+<li *ngFor="let user of users">	//used to iterate over collection of items
+  {{ user }}					//generate HTML elements for each item
+</li>
+
+
+
+>OUtput:
+<li>John</li>
+<li>Jane</li>
+<li>Bob</li>
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ex2
+
+ngIf directive
+
+//display view/ portion under some condition
+
+<p *ngIf="user.age > 18">You are not eligible for student pass!</p>

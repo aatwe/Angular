@@ -1,0 +1,29 @@
+1) How to perform error handling in observables? error()
+ 1.1) what we did ? specified error callback
+			  didnt rely on try{} or catch{}	//dont work in asynchronous
+
+	
+.subscribe() takes 2 args
+	next()	:	whenever observable returns new value --> next() called
+	error()	:	whenever error occurs --> error() called
+	complete()	:	whenever observable completes --> complete() called
+
+	//we use error() callback
+
+myObservable.subscribe({
+  next(num) { console.log('Next num: ' + num)},
+  error(err) { console.log('Received an errror: ' + err)}	//use error() callback
+});
+
+	//What error() does? handle errors that occur during subscription
+				   logs it to console.
+
+
+
+  1.2) Another way:
+
+myObservable.subscribe(
+  x => console.log('Observer got a next value: ' + x),
+  err => console.error('Observer got an error: ' + err),
+  () => console.log('Observer got a complete notification')
+);

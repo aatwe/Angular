@@ -1,0 +1,11 @@
+1) Component lifecycle
+
+constructor
+ngOnChanges		called when value of data bound property changes
+ngOnInit		data bound properties displayed --> directive/component initialized -> then 			called
+ngDoCheck		detect and act on changes that angular cant on its own
+	ngAfterContentlnit	external content projected in component's view --> called
+	ngAfterContentChecked	checks content projected in component --> called
+	ngAfteWiewlnit		component's views + child views init --> called
+	ngAfterViewChecked	component's views + child views checked --> called
+ngOnDestroy		called --> angular destroys directive/component

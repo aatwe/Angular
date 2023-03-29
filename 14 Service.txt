@@ -1,0 +1,42 @@
+1) What is use of service?
+	extract common functionality out of components and extend to different modules
+	
+2) What below 'RepoService' service does?	
+	fetch data from an external API (Github API)
+
+	2.1) @Injectable //required for dependency injection
+				//other components in app can use this service. (How? inject as 					dependency)
+
+	2.2) import HTTP service 
+		import { Http } from '@angular/http';
+
+	2.3) How to inject dependency?
+		 constructor  for RepoService class
+		  takes input: Http service as parameter
+		    injected in RepoService class
+
+	    What this injection achieves?
+		RepoService class can use Http service  --> make http requests
+
+	
+	2.4) fetchAll() called
+		 use http service inside	//GET request
+		   //to fetch data about all repo
+
+		 map() method --> transforms the response (from API --> JSON object)
+		returned by fetchAll()
+
+3) 
+
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+
+@Injectable() // The Injectable decorator is required for dependency injection to work
+export class RepoService{
+  constructor(private http: Http){
+  }
+
+  fetchAll(){
+    return this.http.get('https://api.github.com/repositories').map(res => res.json());
+  }
+}

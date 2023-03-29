@@ -1,0 +1,17 @@
+1) use 'combineLatest' operator	//combine multiple streams into 1 observable
+						//observable : emits array //latest values
+
+
+import { combineLatest } from 'rxjs';
+
+// Define two observables
+	const firstStream$ = ...; // e.g. an HTTP request that returns some data
+	const secondStream$ = ...; // e.g. a form control value change event
+
+// Combine the two streams
+	const combinedStream$ = combineLatest([firstStream$, secondStream$]);
+
+// Subscribe to the combined stream
+	combinedStream$.subscribe(([firstValue, secondValue]) => {
+  // Do something with the latest values from each stream
+});

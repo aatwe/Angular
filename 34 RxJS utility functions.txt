@@ -1,0 +1,11 @@
+1) Convert asyn operation code --> observables? 
+
+2) iterating through values in a stream
+
+3) map values to different types
+
+4) Filtering streams
+
+5) Composing multiple streams
+	
+ 

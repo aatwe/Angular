@@ -1,0 +1,10 @@
+1) Why response body doesnt contain full response?
+	servers return special headers/status code
+
+Solution: use observe option
+	
+
+getUserResponse(): Observable<HttpResponse<User>> {
+  return this.http.get<User>(
+    this.userUrl, { observe: 'response' });		//observe option
+}	

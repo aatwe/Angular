@@ -1,0 +1,57 @@
+Objective: transform array of numbers into array of strings -->using map()
+
+1) 	import compontent to create compontent
+  	import Observable to use observable
+	import map to use map() 
+	
+2) Define AppComponent //@Component decorator
+	what selector for component? 'app-root'
+	what template contains? unordered list
+		what list contains? items bound to 'items' array
+		  template: `
+   			 <ul>
+   			   <li *ngFor="let item of items">{{ item }}</li>
+   			 </ul>
+	
+		  `
+3) Define 'item$' property in component
+	What type?  Observable<string[]>	//items$: Observable<string[]>;
+
+4) Define a constructor in component
+	what constructor does? create new observable  'numbers$' e
+		What observable does? emit array of numbers
+
+
+5) Apply  map() operator to 'numbers$' observable
+	How? Use pipe() 
+
+	What map() will do? transform array of no. ---> array of strings
+			how? prefix each no. with string
+	//basically  take array of no. from 'numbers$' observable
+	//transform--> each no. --> to string  //how? "Number "
+
+
+
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <ul>
+      <li *ngFor="let item of items">{{ item }}</li>
+    </ul>
+  `
+})
+export class AppComponent {
+  items$: Observable<string[]>;
+
+  constructor() {
+    const numbers$ = Observable.of([1, 2, 3, 4, 5]);
+    this.items$ = numbers$.pipe(
+      map(numbers => numbers.map(n => `Number ${n}`))
+    );
+  }
+}
+

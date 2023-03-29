@@ -1,0 +1,43 @@
+1) What are observables?
+	declaratives : Components, directives,Pipes,Routes
+
+
+	1.1) pass message between 
+			publisher --------- subscriber 	in application
+
+
+	1.2) use for?
+			event handling,
+			asynchronous programming
+			handling multiple values
+
+	1.3) How to implement observables?
+
+	
+
+	a) RxJS library: helps working with asynchronous data streams
+
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';				//import observable class from rxjs
+
+@Component({
+  selector: 'app-example',
+  template: `
+    <div *ngFor="let item of items | async">{{ item }}</div> 
+															//use async pipe in template  -->to subscribe to 'items$' observable ---> 							//displays resulting items in a loop
+  `,
+})
+export class ExampleComponent implements OnInit {
+  items$: Observable<string[]>;				//Define component with 											'item$' property of type 											'Observable<string[]>'
+
+  ngOnInit() {							//Lifecycle hook
+    this.items$ = this.getItems();				//set defined item$ property = 									//whatever result from calling getItems()
+  }
+
+  getItems(): Observable<string[]> {		//getItems() returns Observable<string[]>
+    // Implementation details
+  }
+}
+
+
+Conclusion: This is how observables can be used to handle asynchronous data streams in Angular applications

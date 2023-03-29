@@ -1,0 +1,79 @@
+1) import { Component } from '@angular/core';	//Define a component
+   import { Observable } from 'rxjs';		//work with observables
+
+2) Define component AppComponent using @Component
+	Component contains
+		selector
+		template containing unordered list
+
+ 2.1)define a property 'item$' in component
+	items$: Observable<string[]>;
+	
+	//What is this property? observable streams
+		what does it return? array of strings
+
+ 2.2) define a property 'items' 	//type string[]
+	//list of items to display in template
+
+ 2.3) constructor() injects MyService instance in component	
+	//What MyService does? returns observable --> emitting array of string
+
+ 2.4)  define ngOnIt() //called when component initialized
+		use getItems() of MyService			
+			what getItems() does? returns observable
+		assign that observable  to 'item$' property
+		//this.items$ = this.myService.getItems();
+ 2.5) subscribe to item$ observable
+		How? subscribe()
+		pass an object with 3 callback functions (next,error,complete)
+	//called when new value returned by item$ observable
+ 	
+
+	{
+      next: (value) => {		//if new value emitted by item$ observable -> next(emittedvalue) -->updates items array with new value
+        this.items = value;		//Update items array with new observable
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('Items stream complete.');
+      }
+
+
+  2.6) ngFor directive in template
+		iterate over 'items' array and display each item
+
+
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <ul>
+      <li *ngFor="let item of items">{{ item }}</li>
+    </ul>
+  `
+})
+export class AppComponent {
+  items$: Observable<string[]>;
+  items: string[] = [];
+
+  constructor(private myService: MyService) {}
+
+  ngOnInit() {
+    this.items$ = this.myService.getItems();
+    this.items$.subscribe({
+      next: (value) => {
+        this.items = value;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('Items stream complete.');
+      }
+    });
+  }
+}

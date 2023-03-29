@@ -1,0 +1,27 @@
+Application = tree of individual components
+1) Define structure of UI using html templates
+
+2) bind data to templates (Using component class)
+
+3) data binding
+
+4) Dependency injection
+
+5) Routing
+
+6) Animation
+
+7) Angular CLI
+	//helps to generate components
+		     generate services
+		     generate modules
+		     generate application artifacts
+
+8) Testing
+		     write unit tests
+		     write integeration tests
+		     write end-to-end tests
+
+declarative templates
+dependency injection
+end to end tooling

@@ -1,0 +1,52 @@
+1) Component ---- DOM
+
+How data is flowing
+
+
+
+1.1) Component ---> DOM   
+
+
+
+	1.1.1) {{}} : interpolation // Does what? adds value of that 								property from component into DOM
+Ex	<li>Name: {{ user.name }}</li>
+	<li>Address: {{ user.address }}</li>
+
+
+
+	//Component --> property
+	  Component --> html attribute
+
+	1.1.2) [property]	:Property binding
+	
+Ex 	<input type="email" [value]="user.email">
+
+
+1.2) DOM ---> Component
+
+	1.2.1) Event binding
+	(event) = "function"
+	//function called when specific DOM event happens ex click,change,keyup
+
+Ex
+	<button (click)="logout()"></button>	
+
+
+
+1.3) Two Way Binding:
+	import 'FormsModule' from '@angular/forms'		//in our module
+	//[(ngModel)]="value"	
+
+	<input type="email" [(ngModel)]="user.email">
+
+	Conclusion:
+
+		ngModel: binds whatever value in <input> -->  user.email (property in 				component)
+
+		Any changes made in <input> --> reflect in user.email
+		Any changes made in user.email --> reflect in <input> 
+
+
+
+Feature: Conclusion: changes in UI --> reflected immediately in component and vice versa
+		

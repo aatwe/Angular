@@ -1,0 +1,261 @@
+Problem Statement:
+ConclusioN:
+Ex1 Communicate state of 1 part of Application----> other parts (decoupled way)
+
+Ex2 Keep UI in sync with state of application
+	-> for ex chat app --> messages displayed real time as received from server
+	//What observable pattern does? notify UI --> to update with new message
+	//while not keeping UI tightly coupled with underlying logic
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+a) UI subscribes to observable object
+	what observable object does? handles messages from server
+b) if new chat data arrive
+	notify all subscribed observers (UI) -> with new data
+
+c) UI receives data --> update chat interface --> display data
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Ex chat code:
+
+a) //Define a class  ChatObservable// what this class does? handles incoming messages from server
+			//where is it handling messages? startPolling()	//make request to server, get messages (newMessages)
+
+b) //After getting messages from server --> notify all subscribers  //this.notify(newMessages);
+
+c) Define a class chatInterface
+	What this class does?
+	  //What this class does? display new messages data received --> to UI //update state
+		displayNewMessage(message) 
+		.init()
+d) Cretae chatInterface object
+	//const chatInterface = new ChatInterface();
+	.init()				//subscribe displayNewMessage() of chatInterface object---> chatObservable object
+
+Conclusion:
+	realtime display chat messages --> UI
+	ChatObservable object	//server communication handle (subscribe,unsubscribe,notify)
+	Subscribe chatInterface --> ChatObservable --> update chatMessages[]
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class ChatObservable {
+  constructor() {
+    this.observers = [];
+  }
+  
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+  
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+  
+  notify(data) {
+    this.observers.forEach(observer => observer(data));
+  }
+ startPolling() {
+    setInterval(() => {
+      // Make a request to the server to check for new messages
+      const newMessages = ... // Get new messages from server
+      
+      // Notify all subscribed observers with the new messages
+      this.notify(newMessages);
+    }, 5000); // Poll every 5 seconds
+  }
+}
+
+
+
+
+class ChatInterface {		
+  constructor() {
+    this.chatMessages = [];
+    this.chatObservable = new ChatObservable();
+  }
+  
+  displayNewMessage(message) {
+    // Add the new message to the chat interface
+    this.chatMessages.push(message);
+    console.log(`New message received: ${message}`);
+  }
+  
+  init() {
+    // Subscribe the chat interface to the chat observable
+    this.chatObservable.subscribe(this.displayNewMessage.bind(this));
+    
+    // Start polling for new messages
+    this.chatObservable.startPolling();
+  }
+}
+
+
+const chatInterface = new ChatInterface();
+chatInterface.init();
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+
+
+1) What is observable? object, similar to promise
+	1.1) What promise looks like?
+
+	function fetchUser(id) {
+  return new Promise(function(resolve, reject) {
+    fetch(`https://example.com/users/${id}`)
+      .then(response => response.json())
+      .then(user => resolve(user))
+      .catch(error => reject(error));
+  });
+}
+
+
+
+	1.2) What it does? manage async code	//similar to promise
+	
+
+	1.3) What library? RxJS
+		
+	
+2) How to create observable?	new Observable(observer => {//async code})
+  2.1) what is observer? interface 
+	
+	//Concept: What is interface in JS? defines what (public methods, properties)  class should have ---> to be considered of a certain type		//CONTRACT //that must be implemented  																									by any object
+			
+	a) Create interface
+
+	const Interface = {
+		getMethod1() {
+		
+		}
+		getMethod2(){
+	
+		}
+	};
+
+
+	b) Create an object that implements interface
+
+	const object = {
+		width: 10,
+		height: 5,
+		getMethod1() {
+			return this.width * this.height;
+		}
+		getMethod2() {
+			return 2*(this.width + this.height);
+		}
+	}
+
+	function checkIfImplements(object) {
+		if(!('getArea' in shape)) {
+			return false;
+		}
+
+		if(!('getPerimeter' in shape)) {
+			return false;
+		}
+	  return true;
+	}
+	console.log(checkIfImplements(object));		//true	//since both methods are implemented
+
+2.2) what if observer object is an interface?	this interface is passed in Observable()
+		why do we pass interface? to define a contract
+
+2.3) What observer interface looks like:
+
+interface Observer<T> {
+  closed?: boolean;
+  next: (value: T) => void;
+  error: (err: any) => void;
+  complete: () => void;
+}
+
+
+-----------------------------------------------------------------------------
+import { Observable } from 'rxjs';
+
+const observable = new Observable(observer => {
+  setTimeout(() => {
+    observer.next('Hello from a Observable!');
+  }, 2000);
+});
+ 
+
+
+
+2.4) 
+	a) Create observable class
+		contains constructor(initializes empty array)
+		3 methods:
+			subscribe()   : takes input observer --> add to list of observers
+			unsubscribe() : takes input observer --> remove from list of observers
+			notify()	  : take  data as arg    --> notify all observer in list. (How? call their callback function(data)
+
+
+	b) Create some observers  //what are these observers? functions
+					  //what do these observer functionss do? log message when receiving data	
+
+			const observer1 = (data) => console.log(`Observer 1 received ${data}`);
+			const observer2 = (data) => console.log(`Observer 2 received ${data}`);
+			const observer3 = (data) => console.log(`Observer 3 received ${data}`);
+
+	c) Create instance of observable class, subscribe the observers
+		call notify() of instance
+
+
+			const observable = new Observable();
+				observable.subscribe(observer1);
+				observable.subscribe(observer2);
+				observable.subscribe(observer3);
+	
+			observable.notify('new data');
+	d) Unsubscribe observer2
+			observable.unsubscribe(observer2);
+
+	e) Notify again
+			observable.notify('more data');
+
+class Observable {
+  constructor() {
+    this.observers = [];
+  }
+  
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+  
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+  
+  notify(data) {
+    this.observers.forEach(observer => observer(data));
+  }
+}
+
+const observer1 = (data) => console.log(`Observer 1 received ${data}`);
+const observer2 = (data) => console.log(`Observer 2 received ${data}`);
+const observer3 = (data) => console.log(`Observer 3 received ${data}`);
+
+const observable = new Observable();
+observable.subscribe(observer1);
+observable.subscribe(observer2);
+observable.subscribe(observer3);
+
+observable.notify('new data');
+
+observable.unsubscribe(observer2);
+
+observable.notify('more data');
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ConclusioN:
+Ex1 Communicate state of 1 part of Application----> other parts (decoupled way)
+
+Ex2 Keep UI in sync with state of application
+	-> for ex chat app --> messages displayed real time as received from server
+	//What observable pattern does? notify UI --> to update with new message
+	//while not keeping UI tightly coupled with underlying logic
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++====
+
+

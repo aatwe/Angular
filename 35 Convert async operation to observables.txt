@@ -1,0 +1,54 @@
+1.1) How ? observable class
+
+
+import { HttpClient } from '@angular/common/http';		//Http client service
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class DataService {
+
+  constructor(private http: HttpClient) { }
+
+										//Define getData() method
+  getData(): Observable<any> {					//return Observable object
+    return this.http.get('https://api.example.com/data');   //make http request to api end 										//point
+  }
+}
+
+
+
+1.2) use getData() in Appcomponent
+	1.2.1)//import DataService
+	1.2.2)//call getData()	
+
+	1.2.3)assigns returned observable tp $data
+		use 'async' pipe to subscribe to observable
+		display data once avail
+
+	 template: `
+    <div *ngIf="data$ | async as data">
+      <h1>Data:</h1>
+      <p>{{ data }}</p>
+    </div>
+
+import { Component } from '@angular/core';
+import { DataService } from './data.service';			//import DataService
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div *ngIf="data$ | async as data">
+      <h1>Data:</h1>
+      <p>{{ data }}</p>
+    </div>
+  `
+})
+export class AppComponent {
+  data$: Observable<any>;
+
+  constructor(private dataService: DataService) {}
+
+  ngOnInit() {
+    this.data$ = this.dataService.getData();
+  }
+}

@@ -1,0 +1,58 @@
+a.1) What is bootstrapping module
+
+	what is bootstrapping?
+			initializing + running Angular application
+	what is bootstrapping module?
+			module that initializes + configures Angular app
+
+	Which module is main module of Angular App? AppModule
+	This module is bootstrapped i.e AppModule loaded with dependencies	
+		Angular Compiler compiles application
+
+a.2) How bootstrapping process works?
+	a.2.1) initiated by main.ts
+			imports platformBrowserDynamic function from @angular/platform-browser-dynamic
+	
+	a.2.2) What bootstrapping module looks like?
+		a.2.2.1) Define App module using @NgModule
+				what NgModule specifies? components, services, other features 					included in module.
+
+		a.2.2.2) bootstrap :[AppComponent] //AppComponent should be bootstrapped when 				module is loaded
+
+//app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+/* JavaScript imports */
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+
+/* the AppModule class with the @NgModule decorator */
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

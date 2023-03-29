@@ -1,0 +1,39 @@
+1) Creation functions	// help to create observables from  promises, events, timers, Ajax 				requests
+
+
+  1.1) Create observable from promise
+
+import { from } from 'rxjs'; // from function
+const data = from(fetch('/api/endpoint')); //Created from Promise
+data.subscribe({
+ next(response) { console.log(response); },
+ error(err) { console.error('Error: ' + err); },
+ complete() { console.log('Completed'); }
+});
+
+
+  1.2) Create observable from AJAX request
+
+import { ajax } from 'rxjs/ajax'; // ajax function
+const apiData = ajax('/api/data'); // Created from AJAX request
+// Subscribe to create the request
+apiData.subscribe(res => console.log(res.status, res.response));
+
+
+
+1.3) Create observable from counter
+
+import { interval } from 'rxjs'; // interval function
+const secondsCounter = interval(1000); // Created from Counter value
+secondsCounter.subscribe(n =>
+  console.log(`Counter value: ${n}`));
+
+
+1.4) Create observable from event
+
+import { fromEvent } from 'rxjs';
+const el = document.getElementById('custom-element');
+const mouseMoves = fromEvent(el, 'mousemove');
+const subscription = mouseMoves.subscribe((e: MouseEvent) => {
+  console.log(`Coordnitaes of mouse pointer: ${e.clientX} * ${e.clientY}`);
+  });

@@ -1,0 +1,119 @@
+1) What is typescript?
+	superset of JS
+
+
+
+2) How to install typescript?
+		npm install -g typescript
+
+
+3) why need TS?What features in typescript?
+		1.1) optional types :
+			What are optional types?
+			let name: string | undefined;  	//variable can be of type string or 		undefined
+
+Ex
+function greeter(person: string) {
+    return "Hello, " + person;
+}
+
+let user = "Sudheer";
+
+document.body.innerHTML = greeter(user);
+		
+
+
+
+		1.2) classes (OOPS concept)
+class Animal {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+    move(distance: number) {
+        console.log(`${this.name} moved ${distance} meters.`);
+    }
+}
+
+
+
+		1.3) async/await (Asynchronous programming)
+//How typescript implements async/await?
+Conclusion: code that uses await --> must be wrapped in async
+
+async function fetchData() {		//asynchronous function  waits for fetch api() to return a response
+
+  const response = await fetch('https://example.com/data.json');
+  const data = await response.json();					//response body --> JSON
+  return data;									//return parsed JSON data		
+}
+
+fetchData().then(data => {							//returns a promise --> promise resolved with parsed JSON data
+  console.log(data);
+}).catch(error => {
+  console.error(error);								//if any error during fetch or parsing , --> promise rejected
+});
+
+
+
+
+
+		1.4) typechecking
+//How typescript implements typechecking?
+// Defining a function that takes two parameters of type number and returns their sum
+function addNumbers(a: number, b: number): number {
+  return a + b;
+}
+
+// Calling the addNumbers function with two numbers as arguments
+const sum = addNumbers(2, 3);
+
+// Attempting to call the addNumbers function with a string argument
+const invalidSum = addNumbers(2, '3'); // Error: Argument of type 'string' is not assignable to parameter of type 'number'
+
+console.log(sum); // Output: 5
+console.log(invalidSum); // This line will not execute due to the error thrown above
+
+			
+
+
+		1.5) interfaces
+//How Typescript implements interfaces? 
+
+interface Person {				//define interface
+  name: string;						//name property
+  age: number;						//age property
+  sayHello: () => void;					//sayHello property
+}
+
+class Employee implements Person {		//Employee class is implmenting defined interface Peson		//should atleast have whatever defined in Person interface 
+  name: string;						//uses all proeprties and methods of Person interface
+  age: number;
+  employeeId: number;
+
+  constructor(name: string, age: number, employeeId: number) {		//constructor for Employee class to initialize its own properties
+    this.name = name;
+    this.age = age;
+    this.employeeId = employeeId;
+  }
+
+  sayHello() {										//sayHello() to log message to console
+    console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`);
+  }
+}
+
+const employee = new Employee('John Doe', 35, 12345);						//create instance of that class
+employee.sayHello(); // Output: "Hello, my name is John Doe and I'm 35 years old."	//call sayHello() 
+
+
+
+
+
+
+		1.6) advanced OOPS features: not avail in JS
+
+	why not JS? JS: dynamic loosely typed language (supported on Angular though)
+			TS: strongly typed language 	     ()
+
+
+	

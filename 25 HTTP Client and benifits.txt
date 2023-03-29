@@ -1,0 +1,59 @@
+How frontend communicate with backend? HTTP protocol
+
+
+1) XMLHttpRequest interface
+
+
+2) fetch() API
+
+
+
+3) //Only for Angular
+	HttpClient (based on XMLHttpRequest interface)
+
+  3.1) how to use?
+	import { HttpClientModule } from '@angular/common/http';
+
+  3.2) ex
+Scenario: use HttpClient service in Angular
+	    make an HTTP GET request
+
+
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; //import service
+
+@Component({
+  selector: 'app-example',
+  template: `
+    <div *ngFor="let item of items">{{ item }}</div> //*ngFor directive --> loop through 									//'items' array. //display each item in 									//<div>
+  `,
+})
+export class ExampleComponent {		//Define component
+  items: string[];				//define items property of type string[]
+
+  constructor(private http: HttpClient) {} //inject service as a dependency in constructor
+
+  ngOnInit() {				      //LifeCycle hook
+	
+    this.http.get<string[]>('https://jsonplaceholder.typicode.com/todos').subscribe(
+							//make HTTP GET request -> use http.get()
+							//endpoint = ''
+							//return array of objects	
+							//subscribe to 'Observable<string[]>
+							//set 'items' property: resulting array
+      (data) => {						
+        this.items = data;				
+      },												
+		
+      (error) => {				//if any error log to console
+        console.log('Error:', error);	
+      }
+    );
+  }
+}
+
+
+Conclusion: made HTTP request, handled resulting data
+
+
+4) Other advantages of using HttpClient? next 

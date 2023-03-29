@@ -1,0 +1,17 @@
+What use? extend HTML element behaviour
+
+For ex
+
+1)
+import { Directive, ElementRef, Input } from '@angular/core';
+
+@Directive({ selector: '[myHighlight]' })
+export class HighlightDirective {
+    constructor(el: ElementRef) {
+       el.nativeElement.style.backgroundColor = 'yellow';
+    }
+}
+
+
+2)	//extend as yellow background
+<p myHighlight>Highlight me!</p>

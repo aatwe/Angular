@@ -1,0 +1,79 @@
+Angular		Angular JS
+MVC			Service/Controller
+JS			Typescript
+Controllers		Component based
+not mobile		can dev for mobile
+			can create SEO friendly applications easily
+
+
+What are seo friendly applications:
+
+a) use semantic HTML //meaningful
+
+b) fast page load speed prefer
+
+c) urls describing content 
+
+d) HQ relevant content
+
+e) use metadata : 
+		title tags
+		meta descriptions
+		keywords
+	//where is meta data stored? head section of html (stored using html tags)
+		<title> 		and 	<description>
+		//in title bar		//summary of content
+		//visible in title bar	//displayed in search results
+
+
+	Other meta tags:
+		meta-description
+		meta-data
+		meta-robots
+		meta-author
+
+f) responsive design:
+	app can be viewed in any device
+
+	f.1) fluid grid system : instead of fixed-width
+			Bootstrap,Foundation,Materialize,
+
+	f.2) flexible media:
+			use HTML attribute: srcset, sizes
+			HTML 5 Audio/Video: adapt to size
+
+	f.3) breakpoints:
+		@media (min-width: 768px) {...}
+		//what this will do? check if screen size is larger
+
+
+	f.4)media queries:
+			//specify style for certain screen size
+
+	f.5) Typography : make sure typography adapt to screen size
+		use font-size, line-height,letter-spacing
+
+	f.6) Test on multiple devices and screensizes
+		use tools: BrowserStack or Sauce Labs
+				
+
+g) Structured data using schema markup
+
+	g.1) Define what type of structured data
+		Ex Article
+
+	g.2) What schema vocabulary (Schema.org)
+		Article Schema
+	g.3) Add markup to your HTML
+
+<article itemscope itemtype="http://schema.org/Article">
+  <h1 itemprop="headline">Article Title</h1>
+  <p itemprop="description">Article description.</p>
+  <time itemprop="datePublished" datetime="2022-03-23T10:00:00-07:00">March 23, 2022</time>
+  <div itemprop="articleBody">
+    <p>Article content.</p>
+  </div>
+</article>
+
+
+	g.4) Test the structured data using structured data testing tools

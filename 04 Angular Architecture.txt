@@ -1,0 +1,512 @@
+1.1) Components : Basic blocks, control views : :logic + data(typescript class)
+
+	Scenario: How to define a component "AppComponent"?
+		    Define a template --> template displays greeting message using 'name' 			    property	
+			
+	
+	Note: Component =  template file(Componentname.component.html) + style file (Componentname.component.css)+ typescript file (Componentname.component.ts)
+
+Ex1:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',			//selector for component
+  template: `				//template for component's view
+    <h1>Hello, {{ name }}!</h1>
+  `
+})
+export class AppComponent {
+  name = 'World';
+}
+
+
+
+Ex2:app.component.ts
+//Defines behaviour of a section of UI
+import { Component } from '@angular/core';
+
+@Component({					//decorator //defines component's metadata
+  selector: 'app-root',					//defines selector
+  template: `							//defines template
+    <h1>Welcome to {{title}}!</h1>
+    <p>Here is some text in the component template.</p>
+  `,
+  styles: [									//defines styles
+    `
+    h1 {
+      color: blue;
+    }
+    `
+  ]
+})
+export class AppComponent {
+  title = 'My Angular App';
+}
+
+
+
+1.2) Modules: Application divided in modules : Group of components  //group related functionality into reusable units
+// How to define a module "AppModule"
+
+Ex1: Scenario: importing modules in a code that defines a component
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';		
+import { AppComponent } from './app.component';
+
+@NgModule({						
+  declarations: [AppComponent],	//Declare AppComponent
+  imports: [BrowserModule],		//imports Browser module
+  providers: [],				//used to provide services to the module
+  bootstrap: [AppComponent]		//entry point for application
+})
+export class AppModule { }
+
+
+Ex2: app.module.ts
+
+ //imports necessary components and modules
+     //specifies providers, bootstrap values
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { ContactComponent } from './contact/contact.component';
+import { AppRoutingModule } from './app-routing.module';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    ContactComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+  1.3) Services	//help to share data between components
+			//only 1 instance of a service
+
+How Angular implements services
+
+Scenario: Given a component: displays list of users
+Where to get data from? retrieve data for the users from external API ?
+
+UserService will retrieve data and return to component
+
+	1.3.1) Create new service file
+	Does what? add data to array, return array		
+
+//DataService.service.ts
+
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  private data: string[] = [];
+
+  addData(item: string) {
+    this.data.push(item);
+  }
+
+  getData(): string[] {
+    return this.data;
+  }
+}
+
+
+	1.3.2) Inject this service in a component
+
+import { Component } from '@angular/core';
+import { DataService } from './data.service';		//import 
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>My App</h1>
+    <input type="text" [(ngModel)]="newItem">
+    <button (click)="addItem()">Add Item</button>
+    <ul>
+      <li *ngFor="let item of items">{{item}}</li>
+    </ul>
+  `
+})
+export class AppComponent {
+  newItem: string;
+  items: string[];
+
+  constructor(private dataService: DataService) {}
+
+  ngOnInit() {							//gets called when component initialized
+    this.items = this.dataService.getData();			//calls service
+  }
+
+  addItem() {
+    this.dataService.addData(this.newItem);
+    this.items = this.dataService.getData();
+    this.newItem = '';
+  }
+}
+
+
+
+
+1.4) Templates:  whatever defined in component -->	rendered in template
+	template = HTML + Angular specific directives + expression bindings
+	//define structure and behaviour of component
+	//separate presentational logic || business logic
+	
+	Component =  template file(Componentname.component.html) 			+		 style file (Componentname.component.css)		+ 	typescript file (Componentname.component.ts)
+			  //contains HTML markup (structure,content of component)												//Component logic
+			  //contains directives, bindings 																//Data ,properties, methods, event handlers
+			  //Angular specific syntax
+Ex
+<h2>List of items</h2>
+<ul>
+  <li *ngFor="let item of items">{{item}}</li>
+</ul>
+
+
+
+	1.4.1) Ex of typescript file for same component
+		Defines class,property,logic
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-item-list',
+  templateUrl: './item-list.component.html',
+  styleUrls: ['./item-list.component.css']
+})
+export class ItemListComponent {
+  items: string[] = ['item 1', 'item 2', 'item 3'];
+}
+
+
+
+	1.4.2)
+		
+//Component
+import { Component } from '@angular/core';
+
+@Component({								//template
+  selector: 'app-root',
+  template: `
+    <h1>Welcome to {{title}}!</h1>
+    <p>Here is some text in the component template.</p>
+  `
+})
+export class AppComponent {
+  title = 'My Angular App';
+}
+
+
+
+
+
+
+1.5) Directives
+	What do they do? extend functionality of HTML elements / Components
+	manipulate DOM
+
+	1.5.1) Component directive
+				 (separate .html, .css, .ts file)
+
+	1.5.2) Attribute Directive
+			What it does?modify behaviour/appearence of HTML
+	
+	1.5.3) Structural Directive
+			What it does? modify structure of DOM (How? Add or remove elements)
+			What looks like? (* asterisk)	//used with ngIf, ngFor directives
+							
+			<h2>List of items</h2>
+			<ul>
+			  <li *ngFor="let item of items">{{item}}</li>
+			</ul>
+
+
+1.6) Dependency injection
+	Scenario: given a service: UserService
+		    Inject this service into a component UserComponent
+	
+	1.6.1) //UserService.service.ts
+//register UserService as a provider in root module. (How? @Injectable decorator, providedIn property)
+
+//Define the service
+//What it does? fetches data frorm API endpoint
+
+
+import { Injectable } from '@angular/core';
+							
+@Injectable({
+  providedIn: 'root'						//register UserService as a provider in root module. (How? providedIn)
+})
+export class UserService {
+  // ...
+}
+
+
+	1.6.2) //UserComponent.component.html
+Scenario: we have the above service, now have to write tests for UserComponent we created.
+Will we make real API requests during testing? NO
+How to mock UserService
+
+
+	If UserService was hardcoded in UserComponent --> would have had to change code during testing
+	But since UserService dependency injected     -->
+
+
+//Define a component: UserComponent
+
+
+import { Component } from '@angular/core';
+import { UserService } from './user.service';			//import service
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
+})
+export class UserComponent {
+  constructor(private userService: UserService) {		//Inject in constructor (How? provide as parameter, private keyword)  //creates instance of userService
+    // ...									//UserService provided to UserComponent
+  }
+}
+
+
+Conclusion: what we did???
+Without modifying UserComponent code
+-------------------------------------------------------------------------------
+Ex2 Another way to dependency inject
+//UserComponent.ts
+
+//uses UserService
+
+import { Component } from '@angular/core';
+import { UserService } from './user.service';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
+})
+export class UserComponent {
+  user: any;
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.userService.getUser().subscribe(data => {
+      this.user = data;
+    });
+  }
+}
+
+
+UserService.js
+//write a test, dont make real API requests.
+How?
+	Create userServicStub object 	//does what? returns hardcoded user data
+	provide this mock service to UserComponent.(How? provide: UserService, useValue: userServiceStub)
+
+
+//we modified behaviour of UserService for testing purposes (didnt affect production code)
+
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { UserService } from './user.service';
+import { UserComponent } from './user.component';
+
+describe('UserComponent', () => {
+  let component: UserComponent;
+  let fixture: ComponentFixture<UserComponent>;
+
+  beforeEach(async () => {
+    const userServiceStub = {
+      getUser: () => of({ name: 'John', age: 30 }),
+    };
+
+    await TestBed.configureTestingModule({
+      declarations: [UserComponent],
+      providers: [{ provide: UserService, useValue: userServiceStub }],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should display user data', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.user-name').textContent).toContain('John');
+    expect(compiled.querySelector('.user-age').textContent).toContain('30');
+  });
+});
+
+
+
+
+
+
+1.7) Routing
+
+
+
+	1.7.1) Create new angular project
+			ng new my-app
+	
+
+	1.7.2) create new component 'home'
+			ng generate component home
+
+		//Creates a folder Home
+		home.component.ts			//Typescript file //determines component class
+		home.component.html		//HTML template
+		home.component.css		//CSS stylesheet
+		home.component.spec.ts		//spec file for units tests
+
+		//Adds 'HomeComponent' to 'app.module.ts' in 'declarations' array
+
+	
+	1.7.3) Define routes . Where? Typescript file : app-routing.module.ts		//specific file
+		 //Define route, map :root path ('')--> HomeComponent
+// app-routing.module.ts		
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  { path: '', component: HomeComponent },				//Define route, map :root path ('')--> HomeComponent
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }					//export the AppRoutingModule
+
+
+
+	1.7.3) Import AppRoutingModule into app.module.ts	//configure and bootstrap file
+	
+		What is app.module.ts used for? configure and bootstrap application
+				//import modules, Declare components, bootstrap application(define root component + specify services + other configuration)
+		 
+
+	
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';		//import
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule								//import
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+	1.7.4) Add finally < /> in app.component.html file
+
+<router-outlet></router-outlet>
+
+
+
+	1.7.5) Add links to routes in app.component.html
+
+<nav>
+  <a routerLink="/" routerLinkActive="active">Home</a>
+</nav>
+
+
+	1.7.6) Run application
+
+ng serve
+
+
+Conclusion: when navigate to root path of application ----> See HomeComponent displayed
+
+if click 'Home' link ---> go to HomeComponent
+
+
+
+
+
+
+1.8) Metadata
+		What use? Add more data to an angular class
+		How to define? Decorators for ex @Component	
+		
+Ex1: using @Component
+HomeComponent.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-home',				//identifier for the component in HTML template	//CSS-selector
+  templateUrl: './home.component.html',	//location of template
+  styleUrls: ['./home.component.css']	//location of stylesheets				//template + stylesheet + component --> define component's view
+})
+export class HomeComponent {
+  title = 'Welcome to the Home Page';	
+}
+	
+
+
+Ex2 Using @Directive
+
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]'			
+})
+export class UnlessDirective {
+  @Input() set appUnless(condition: boolean) {	//@Input Property : 'appUnless'		//What use? pass boolean value to directive	//set method: Checks value of condition
+    if (!condition) {
+      this.viewContainer.createEmbeddedView(this.templateRef);						//create embedded view  //how? using templateRef
+    } else {	
+      this.viewContainer.clear();											//clear view container
+    }
+  }
+
+  constructor(													//Define a constructor
+    private templateRef: TemplateRef<any>,									//inject 'TemplateRef' and 'ViewContainerRef'
+    private viewContainer: ViewContainerRef										//create view		//manipulate view
+  ) { }
+}
+
+
+Conclusion: We used meta data to provide additional info (selector, template, styles) for a component/ selector + directive inputs
+
+
+//How we defined meta data ? decorators
+	What are decorators? functions applied to a class or its memebers
+

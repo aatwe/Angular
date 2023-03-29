@@ -1,0 +1,12 @@
+if request didnt reach server, HttpClient returns error object
+
+pass error object as second callback to subscribe() method
+
+
+fetchUser() {
+  this.userService.getProfile()
+    .subscribe(
+      (data: User) => this.userProfile = { ...data }, // success path
+      error => this.error = error // error path		//error object as 2nd callback
+    );
+}

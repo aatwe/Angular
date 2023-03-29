@@ -1,0 +1,205 @@
+1) What is a data pipe?
+	Input: data
+	Output: desired output
+
+2)Ex.
+Scenario: using pipe transform a component's birthday --> human friendly date
+
+2.1) What pipe? Datepipe
+	What pipe does? format Date object ---> string representing date in a particular format
+	
+	2.1.1) Create a new date object and assign to birthday property
+	2.1.2) pass birthday property in template of component
+	2.1.3) //pass birthday property to 'Datepipe' birthday | date
+	2.1.4) Display result in template
+
+	//What '| pipe'will do?
+	'birthday' object ---> String 	//default date format
+	//
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-birthday',
+  template: `<p>Birthday is {{ birthday | date }}</p>`
+})
+export class BirthdayComponent {
+  birthday = new Date(1987, 6, 18); // June 18, 1987		//new Date object created and 									//assigned to birthday property
+}
+
+
+2.2) How to customize date format?
+  
+  2.2.1) Create component 'CustomDateComponent'
+  2.2.2) import 'DatePipe' from @angular/common
+  2.2.3) inject DatePipe in constructor
+  2.2.4) define property 'birthday'
+		birthday: Date = new Date(1987, 5, 18); // June 18, 1987
+  2.2.5) Define custom date format in string
+		customDateFormat: string = 'MM/dd/yyyy';
+  2.2.6) specify 'birthday' and 'customDateFormat' properties as arguments for 'date'
+		pipe 
+ template: `
+    <h2>Custom Date Format Example:</h2>
+    <p>Birthday: {{ birthday | date: customDateFormat }}</p>
+  `
+//This formats 'birthday' date object  --> using customDateFormat string
+  2.2.8) ngOnInit()
+//Format 'birthday' property --> log the result
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-custom-date',
+  template: `
+    <h2>Custom Date Format Example:</h2>
+    <p>Birthday: {{ birthday | date: customDateFormat }}</p>
+  `
+})
+export class CustomDateComponent {
+  birthday: Date = new Date(1987, 5, 18); // June 18, 1987
+  customDateFormat: string = 'MM/dd/yyyy';
+  
+  constructor(private datePipe: DatePipe) {}
+
+  ngOnInit() {
+    // You can also use the DatePipe in the component class
+    console.log(this.datePipe.transform(this.birthday, this.customDateFormat)); // Output: 06/18/1987
+  }
+}
+
+
+
+
+4) Parameterized pipe
+
+	4.1)  How to declare parameterized pipe? (declare with colon ':')
+		date: 'dd/MM/yyyy'	pipename: parameter
+	    //pipe	//string
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-birthday',
+  template: `<p>Birthday is {{ birthday | date:'dd/MM/yyyy' }}</p>` // 18/06/1987
+})
+export class BirthdayComponent {
+  birthday = new Date(1987, 6, 18);
+}
+
+      4.2)   Note: '/' is used
+			since'\'  escape characters in Javscript strings
+
+
+
+
+5) Chaining pipes
+  5.1) Given 'birthday' property
+
+import { Component } from '@angular/core';
+
+        @Component({
+          selector: 'app-birthday',
+          template: `<p>Birthday is {{  birthday | date:'fullDate' | uppercase}} </p>` // THURSDAY, JUNE 18, 1987
+        })
+        export class BirthdayComponent {
+          birthday = new Date(1987, 6, 18);
+        }
+
+
+6) Custom pipe
+  6.1) How to write your own pipe?
+	a)   @Pipe decorator, pipe metadata.
+	     //import from core Angular library
+
+	    @Pipe({name: 'myCustomPipe'})
+
+	b) Implement interface's method  (PipeTransform)
+		What accepts? input value, optional parameters
+		What returns? transformed value
+
+	interface PipeTransform {
+	  transform(value: any, ...args: any[]): any
+	}
+		
+	c) Define what type name you will use in template expression
+
+	template: `{{someInputValue | myCustomPipe: someOtherValue}}`
+
+
+Ex
+Below code: finds file size based on extension
+
+
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({name: 'customFileSizePipe'})
+export class FileSizePipe implements PipeTransform {
+  transform(size: number, extension: string = 'MB'): string {
+    return (size / (1024 * 1024)).toFixed(2) + extension;
+  }
+}
+
+====================================================
+Use above pipe in template
+ template: `
+    <h2>Find the size of a file</h2>
+    <p>Size: {{288966 | customFileSizePipe: 'GB'}}</p>
+  `
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+7) pure and impure pipes
+
+What is pipe? a way output of process 1 can be used by process 2
+
+What types of pipes?
+	7.1) pure pipe : does not modifies the input
+			     no side effects
+			     is idempotent (if applied multiple times --> same output)
+			//Where used? functional programming
+
+	Ex
+	Scenario: pure pipe function double	
+		    takes input array of numbers
+		    doubles each no.
+		    returns new array
+
+
+function double(numbers) {
+  return numbers.map(n => n * 2);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const doubledNumbers = double(numbers);
+
+console.log(doubledNumbers); // Output: [2, 4, 6, 8, 10]
+
+
+
+
+	if detected change in value/parameters passed to pipe --> pure pipe called
+	ex change in (String,Number,Boolean,Symbol OR Date, Array,Function,Object)
+	
+
+	7.2) impure pipe: modifies input
+				
+				side effects: modifying external state
+				where used? imperative programming
+				
+Scenario:
+	impure function dobuleAndLog()
+	takes input numbers array
+	log result to console		//How state modified here? modifies external state by 						//logging result to console
+
+function doubleAndLog(numbers) {
+  const doubledNumbers = numbers.map(n => n * 2);
+  console.log(doubledNumbers);
+  return doubledNumbers;
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const doubledNumbers = doubleAndLog(numbers);
+
+console.log(doubledNumbers); // Output: [2, 4, 6, 8, 10]
+

@@ -1,0 +1,26 @@
+1) What is async pipe?
+	
+	1.1) what it does?
+		subscribe to observable/promise
+		return latest value emitted
+		when value emitted --> pipe marks component "check for changes"
+		
+
+Ex
+
+Given : A Time observable 
+
+	//what it does? continiously updates view (every 2 seconds)
+
+@Component({
+  selector: 'async-observable-pipe',
+  template: `<div><code>observable|async</code>:
+       Time: {{ time | async }}</div>`
+})
+export class AsyncObservablePipeComponent {
+  time = new Observable(observer =>
+    setInterval(() => observer.next(new Date().toString()), 2000)
+  );
+}
+	
+		

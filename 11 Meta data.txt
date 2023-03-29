@@ -1,0 +1,148 @@
+What it does? configure expected behaviour of class
+
+How?
+
+
+	1) Class Decorators (@Component, @NgModule)
+
+
+import { NgModule, Component } from '@angular/core';
+
+@Component({						//Use @Component class Decorator //marks 									//class as component //provides metadata
+  selector: 'my-component',					//HTML element representing component
+  template: '<div>Class decorator</div>',			//component's template
+})
+								//when 'my-component' found in DOM--> 					//creates instance of component --> insert template in DOM
+
+export class MyComponent {				
+  constructor() {
+    console.log('Hey I am a component!');
+  }
+}
+
+@NgModule({							//Use @NgModule class Decorator //marks 									//class as component //provides metadata
+  imports: [],							//what modules this module depends on
+  declarations: [],						//what components and directives 										//belong to this module
+})
+						//when module bootstrapped ==> angular creates 							instances of (components + directives) = Application
+					
+export class MyModule {
+  constructor() {
+    console.log('Hey I am a module!');
+  }
+}	
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 	2) Property Decorator
+
+
+2.1) @Input decorator	
+	What does? pass data from parent to child
+	//Note: [title]  is property binding syntax
+
+import { Component, Input } from '@angular/core';
+
+@Component({
+    selector: 'my-component',
+    template: '<div>Property decorator</div>'
+})
+
+export class MyComponent {
+    @Input()			//property decorator in Angular
+    title: string;			// 'title' property marked as input property
+}	
+-------------------------------------------------------------
+
+<my-component [title]="'My Title'"></my-component>
+		
+					//title property of my-component class ==> made an 'input 						property'
+
+					//what if title is input property?
+					Parent component --> can bind value to title property
+
+					How?
+					<my-component [title]="'My Title'"></my-component>
+	
+//Conclusion: What @Input() decorator does?
+	String 'My Title' binded to 'title' property
+	'title' property --> public property of <my-component/>
+	//can be accessed + modified by parent
+
+
+What if didnt use @Input?
+	<my-component [title]="'My Title'"></my-component>	//regular class property
+
+
+
+
+2.2) @Output Decorator
+	What it does? emit events from child to parent
+
+
+
+
+
+
+
+3) Method Decorators
+  3.1) What use? methods inside classes
+	Ex use on onHostClick()
+  3.2) What it does? register event listener on host element.
+	  		   register 'click' event listner on host element 'MyComponent'
+  3.3) @HostListener(eventName: string, args?: any[])
+		//what event to listen?		//optional : arguments to pass to event listener
+							//when event is fired
+
+  3.4) What if hadnt used @HostListener()?
+		When host element of MyComponent class clicked -->onHostClick() wont be called
+		
+import { Component, HostListener } from '@angular/core';
+
+@Component({
+    selector: 'my-component',
+    template: '<div>Method decorator</div>'
+})
+export class MyComponent {
+    @HostListener('click', ['$event'])
+    onHostClick(event: Event) {
+        // clicked, `event` available
+    }
+}
+--------------------------------------------------------
+<my-component (click)="onHostClick($event)"></my-component>
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+4) Parameter Decorators
+ 4.1) What use? parameters inside constructor 
+		    Specified what dependency should be injected in class
+		
+	Ex @Inject
+ 4.2) Angular will inject 
+	  @Inject(MyService) myService
+	
+ 4.3) when </my-component> instantiated
+		Angular will inject MyService instance into--> myService
+	
+
+import { Component, Inject } from '@angular/core';
+import { MyService } from './my-service';
+
+@Component({
+    selector: 'my-component',
+    template: '<div>Parameter decorator</div>'
+})
+export class MyComponent {
+    constructor(@Inject(MyService) myService) {		//use @Inject to 
+        console.log(myService); // MyService
+    }
+}
+---------------------------------------------
+<my-component></my-component>
+
+
+Conclusion: behind the scene, by calling a component --> We called MyService inside MyComponent constructor
